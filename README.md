@@ -1,5 +1,6 @@
 ToDo Service
 ============
+[![Java CI with Gradle](https://github.com/sjpuas/todo-service-kotlin/actions/workflows/build.yaml/badge.svg)](https://github.com/sjpuas/todo-service-kotlin/actions/workflows/build.yaml)
 
 Apply spotless
 ```shell
