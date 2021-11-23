@@ -1,0 +1,158 @@
+openapi: 3.0.2
+info:
+  version: 1.0.0
+  title: TO-DO Service
+  description: This service is responsible for TO-DO Lists
+
+paths:
+  /todos:
+    post:
+      summary: "Create a TODO item"
+      tags:
+        - To-Do
+      responses:
+        201:
+          description: "TODO item created"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ToDoItem"
+        default:
+          description: Error occurred - see status code and problem object for information.
+          content:
+            application/problem+json:
+              schema:
+                $ref: 'https://opensource.zalando.com/problem/schema.yaml#/Problem'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ToDoItem"
+            example:
+              {
+                "text": "Lorem ipsum."
+              }
+
+    get:
+      summary: Get all ToDo Items
+      tags:
+        - To-Do
+      responses:
+        200:
+          description: "Returns list of Todo Items."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ToDoList"
+
+  /todos/{todo-id}:
+    get:
+      summary: "Get a ToDo Item"
+      tags:
+        - To-Do
+      responses:
+        200:
+          description: "A ToDo Item"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ToDoItem"
+        default:
+          description: Error occurred - see status code and problem object for information.
+          content:
+            application/problem+json:
+              schema:
+                $ref: 'https://opensource.zalando.com/problem/schema.yaml#/Problem'
+
+    patch:
+      summary: "Update a ToDo Item"
+      tags:
+        - To-Do
+      responses:
+        200:
+          description: "ToDo updated"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ToDoItem"
+        default:
+          description: Error occurred - see status code and problem object for information.
+          content:
+            application/problem+json:
+              schema:
+                $ref: 'https://opensource.zalando.com/problem/schema.yaml#/Problem'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ToDoItem"
+            example:
+              {
+                "status": "DONE"
+              }
+
+    delete:
+      summary: "Delete a ToDo Item"
+      tags:
+        - To-Do
+      responses:
+        204:
+          description: "ToDo deleted"
+        default:
+          description: Error occurred - see status code and problem object for information.
+          content:
+            application/problem+json:
+              schema:
+                $ref: 'https://opensource.zalando.com/problem/schema.yaml#/Problem'
+
+    parameters:
+      - name: todo-id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+
+components:
+  schemas:
+
+    ToDoList:
+      type: object
+      properties:
+        todos:
+          type: array
+          items:
+            $ref: "#/components/schemas/ToDoItem"
+      required:
+        - todos
+
+    ToDoItem:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: "ToDo Id"
+        text:
+          type: string
+          description: "Text of the ToDo Item."
+          example: "Lorem ipsum."
+        status:
+          type: string
+          description: "Status of the ToDo Item."
+          default: ACTIVE
+          x-extensible-enum:
+            - ACTIVE
+            - DONE
+        created_at:
+          type: string
+          description: "Creation datetime."
+          format: date-time
+          example: "2021-08-08T00:00:00Z"
+        completed_at:
+          type: string
+          description: "Complete datetime."
+          format: date-time
+          example: "2021-08-08T00:00:00Z"
+      required:
+        - text

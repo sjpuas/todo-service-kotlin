@@ -1,0 +1,27 @@
+server:
+  port: ${APP_PORT:8080}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: [ "health", "prometheus"]
+  server:
+    port:  ${MANAGEMENT_PORT:8081}
+
+spring:
+  application:
+    name: todo-service
+  flyway:
+    enabled: ${FLYWAY_MIGRATIONS:true}
+  jackson:
+    property-naming-strategy: SNAKE_CASE
+    default-property-inclusion: NON_ABSENT
+  datasource:
+    url: ${DB_URL:jdbc:h2:mem:todo-db}
+    username: ${DB_USERNAME:sa}
+    password: ${DB_PASSWORD:password}
+    driverClassName: org.h2.Driver
+    jpa:
+      spring.jpa.database-platform: org.hibernate.dialect.H2Dialect
+
